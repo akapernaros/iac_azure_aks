@@ -3,11 +3,6 @@
  * subnets for system-, userpool and the default application-gateway and bastion.
  */
 
-resource "azurerm_resource_group" "resourcegroup" {
-  name     = local.rg-name
-  location = var.region_name
-}
-
 resource "azurerm_network_security_group" "security_group" {
   name = local.nsg-name
   location = var.region_name

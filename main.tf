@@ -5,6 +5,10 @@ provider "azurerm" {
   features {}
 }
 
+resource "random_id" "log_analytics_workspace_name_suffix" {
+  byte_length = 8
+}
+
 locals {
   vnet-name = "vnet-${var.region_name}-${var.project_name}"
   vnet-cidr = "10.0.0.0/16"
@@ -20,4 +24,15 @@ locals {
   //snetbast-name = "AzureBastionSubnet"
   //pip-name = "pip-${var.region_name}-${var.project_name}"
   //bast-name = "bast-${var.region_name}-${var.project_name}"
+
+  //K8s
+  logname = "log-${var.region_name}-${var.project_name}-${random_id.log_analytics_workspace_name_suffix.dec}"
+  cluster_name = "aks-${var.region_name}-${var.project_name}"
+  cluster_dns_prefix = "akskmt"
+}
+
+
+resource "azurerm_resource_group" "resourcegroup" {
+  name     = local.rg-name
+  location = var.region_name
 }
