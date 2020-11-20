@@ -11,7 +11,7 @@ resource "random_id" "log_analytics_workspace_name_suffix" {
 
 locals {
   vnet-name = "vnet-${var.region_name}-${var.project_name}"
-  vnet-cidr = "10.0.0.0/16"
+  vnet-cidr = "10.10.0.0/16"
   snets = ["agw", "user", "system"]
   snet-cidrs = cidrsubnets(local.vnet-cidr,8,8,4,4)
   rg-name = "rg-${var.region_name}-${var.project_name}"
@@ -29,6 +29,8 @@ locals {
   logname = "log-${var.region_name}-${var.project_name}-${random_id.log_analytics_workspace_name_suffix.dec}"
   cluster_name = "aks-${var.region_name}-${var.project_name}"
   cluster_dns_prefix = "akskmt"
+  k8s-dns-ip = "192.168.0.10"
+  k8s-service-cidr = "192.168.0.0/16"
 }
 
 

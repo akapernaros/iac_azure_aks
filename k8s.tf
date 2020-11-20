@@ -35,7 +35,7 @@ resource "azurerm_kubernetes_cluster" "k8s" {
     name            = "systempool"
     node_count      = 1
     vm_size         = "Standard_D2_v2"
-    //vnet_subnet_id  = element(azurerm_subnet.snets,2).id
+    vnet_subnet_id  = element(azurerm_subnet.snets,2).id
   }
 
   identity {
@@ -52,7 +52,10 @@ resource "azurerm_kubernetes_cluster" "k8s" {
 
   network_profile {
     load_balancer_sku = "Standard"
-    network_plugin = "azure"
+    network_plugin = "kubenet"
+    dns_service_ip = local.k8s-dns-ip
+    service_cidr = local.k8s-service-cidr
+    docker_bridge_cidr = "172.16.0.1/16"
   }
 
   tags = {
@@ -66,5 +69,5 @@ resource "azurerm_kubernetes_cluster_node_pool" "user" {
   kubernetes_cluster_id = azurerm_kubernetes_cluster.k8s.id
   vm_size               = "Standard_DS2_v2"
   node_count            = 1
-  //vnet_subnet_id        = element(azurerm_subnet.snets,1).id
+  vnet_subnet_id        = element(azurerm_subnet.snets,1).id
 }

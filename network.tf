@@ -37,18 +37,3 @@ resource "azurerm_public_ip_prefix" "ngw" {
   sku ="Standard"
   prefix_length = 31
 }
-
-resource "azurerm_nat_gateway" "ngw" {
-  name                    = local.nat-name
-  location                = var.region_name
-  resource_group_name     = azurerm_resource_group.resourcegroup.name
-  public_ip_prefix_ids    = [ azurerm_public_ip_prefix.ngw.id ]
-  sku_name                = "Standard"
-  idle_timeout_in_minutes = 10
-}
-
-resource "azurerm_subnet_nat_gateway_association" "snetlink" {
-  count = length(local.snets)
-  subnet_id      = element(azurerm_subnet.snets, count.index).id
-  nat_gateway_id = azurerm_nat_gateway.ngw.id
-}
